@@ -1,8 +1,8 @@
 import asyncio
 import websockets
-from util import columnar_transposition_encrypt, columnar_transposition_decrypt
+from util import rail_fence_encrypt, rail_fence_decrypt
 
-key = "WORLD"
+rails = 3
 
 async def handle_client(websocket, path):
     print("Client connected")
@@ -10,10 +10,10 @@ async def handle_client(websocket, path):
     try:
         async for message in websocket:
 
-            message = columnar_transposition_decrypt(message, key)
+            message = rail_fence_decrypt(message, rails)
             print(f"Received: {message}")
 
-            message = columnar_transposition_encrypt(message, key)
+            message = rail_fence_encrypt(message, rails)
             await websocket.send(message)
 
     except websockets.exceptions.ConnectionClosed as e:
